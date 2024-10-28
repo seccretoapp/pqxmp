@@ -1,2 +1,5 @@
-rootProject.name = "pqxmp"
+rootProject.name = 'pqxmp'
+include 'domain'
+include 'application'
+include 'infrastructure'
 

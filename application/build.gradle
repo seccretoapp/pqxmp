@@ -1,0 +1,11 @@
+plugins {
+  id 'java-library'
+}
+
+group 'com.seccreto'
+version '1.0-SNAPSHOT'
+
+dependencies {
+  implementation(project(":domain"))
+  testImplementation(project(path: ":domain", configuration: "testClasses"))
+}

@@ -1,0 +1,35 @@
+plugins {
+  id 'java'
+}
+
+group 'com.seccreto'
+version '1.0-SNAPSHOT'
+
+repositories {
+  mavenCentral()
+}
+
+dependencies {
+  annotationProcessor 'org.projectlombok:lombok:1.18.34'
+  testImplementation 'org.junit.jupiter:junit-jupiter:5.9.2' 
+}
+
+configurations {
+  testClasses {
+    extendsFrom(testImplementation)
+  }
+}
+
+tasks.withType(JavaCompile) {
+  options.encoding = 'UTF-8'
+}
+
+task testJar(type: Jar) {
+  archiveClassifier.set('test')
+  from sourceSets.test.output
+}
+
+test {
+  useJUnitPlatform()
+  systemProperty "file.encoding", "utf-8"
+}

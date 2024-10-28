@@ -1,0 +1,20 @@
+plugins {
+  id('groovy-gradle-plugin')
+}
+
+sourceCompatibility = JavaVersion.VERSION_21
+targetCompatibility = JavaVersion.VERSION_21
+compileJava.options.encoding = 'UTF-8'
+
+apply plugin: 'java'
+tasks.withType(JavaCompile) {
+  options.encoding = 'UTF-8'
+}
+
+repositories {
+  mavenCentral()
+}
+
+test {
+  systemProperty "file.encoding", "utf-8"
+}
