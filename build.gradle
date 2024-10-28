@@ -1,0 +1,22 @@
+plugins {
+    id 'java'
+}
+
+group = 'com.seccreto'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+
+    implementation 'io.undertow:undertow-core:2.3.18.Final'
+    testImplementation 'org.mockito:mockito-core:5.14.2'
+    testImplementation platform('org.junit:junit-bom:5.10.0')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+}
+
+tasks.test {
+    useJUnitPlatform()
+}

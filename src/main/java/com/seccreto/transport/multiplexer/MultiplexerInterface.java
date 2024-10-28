@@ -1,0 +1,12 @@
+package com.seccreto.transport.multiplexer;
+
+import java.io.IOException;
+
+public interface MultiplexerInterface {
+    MultiplexerListener match(MatcherInterface... matcherInterfaces);
+    MultiplexerListener matchWithWriters(MatchWriterInterface... matchers);
+    void serve() throws IOException;
+    void close();
+    void handleError(Throwable throwable); // Aceita Throwable
+    void setReadTimeout(long timeout);
+}
