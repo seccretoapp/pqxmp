@@ -5,24 +5,23 @@ import java.net.Socket;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class MultiplexerListener {
-    private final DefaultMultiplexerInterface multiplexer;
+    private final Multiplexer multiplexer;
     private final ConcurrentLinkedQueue<Socket> connectionQueue = new ConcurrentLinkedQueue<>();
 
-    public MultiplexerListener(DefaultMultiplexerInterface multiplexer) {
+    public MultiplexerListener(Multiplexer multiplexer) {
         this.multiplexer = multiplexer;
     }
 
     /**
      * Accepts a connection if it matches one of the registered matchers.
      *
-     * @return The accepted socket.
+     * @return The accepted socket, or null if no connections are available.
      * @throws IOException If an I/O error occurs while waiting for a connection.
      */
     public Socket accept() throws IOException {
-        // Wait for a connection from the multiplexer
         Socket socket = multiplexer.getSocketQueue().poll();
         if (socket == null) {
-            throw new IOException("No connections available.");
+            return null; // Retorna null em vez de lançar uma exceção
         }
 
         // Check if the connection matches any of the matchers
@@ -33,7 +32,7 @@ public class MultiplexerListener {
         }
 
         socket.close(); // Close if not matched
-        throw new IOException("Connection did not match any handlers.");
+        return null; // Retorna null se nenhum matcher corresponder
     }
 
     /**
@@ -51,6 +50,7 @@ public class MultiplexerListener {
     public void close() {
         for (Socket socket : connectionQueue) {
             try {
+                System.out.println("Socket não correspondeu, fechando.");
                 socket.close();
             } catch (IOException e) {
                 System.err.println("Failed to close socket: " + e.getMessage());

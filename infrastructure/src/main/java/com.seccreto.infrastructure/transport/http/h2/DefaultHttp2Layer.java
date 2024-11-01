@@ -41,6 +41,7 @@ public class DefaultHttp2Layer implements Http2Layer {
         builder.setServerOption(UndertowOptions.ENABLE_HTTP2, true)
                 .setHandler(exchange -> {
                     exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "text/plain");
+                    System.out.println("Dados recebidos em HTTP/2: " + exchange.getRequestHeaders());
                     exchange.getResponseSender().send("Hello, HTTP/2");
                 });
 

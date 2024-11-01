@@ -11,5 +11,5 @@ server:
       worker: 64
       io: 8  
     options:
-      idle-timeout: 30000  
-      max-connections: 2000  
+      idle-timeout: 15000  
+      max-connections: 3000  

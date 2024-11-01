@@ -48,7 +48,7 @@ public class DefaultHttpLayer implements HttpLayer {
                     exchange.getRequestReceiver().receiveFullBytes((ex, data) -> {
                         synchronized (this) {
                             this.receivedData = data;
-                            System.out.println("Dados recebidos: " + new String(data));
+                            System.out.println("Dados recebidos em HTTP/1.x: " + exchange.getResponseHeaders());
 
                             // Envia a resposta armazenada
                             if (dataToSend != null) {

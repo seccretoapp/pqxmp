@@ -10,8 +10,11 @@ repositories {
 }
 
 dependencies {
+  // Lombok para geração de código e anotações
+  compileOnly 'org.projectlombok:lombok:1.18.34'
   annotationProcessor 'org.projectlombok:lombok:1.18.34'
-  testImplementation 'org.junit.jupiter:junit-jupiter:5.9.2' 
+  testCompileOnly 'org.projectlombok:lombok:1.18.34'
+  testAnnotationProcessor 'org.projectlombok:lombok:1.18.34'
 }
 
 configurations {
