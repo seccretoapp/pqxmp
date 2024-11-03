@@ -1,23 +1,77 @@
 plugins {
-    id 'java'
+  id 'java'
+  id 'org.graalvm.buildtools.native' version '0.10.3'
 }
 
 group = 'com.seccreto'
-version = '1.0-SNAPSHOT'
-
-group 'com.seccreto.infrastructure'
 
 repositories {
+  mavenCentral()
+}
+
+// Define o diretório de build para todos os subprojetos
+allprojects {
+  buildDir = "$rootDir/buildSrc"
+}
+
+subprojects {
+  apply plugin: 'java'
+
+  repositories {
     mavenCentral()
-}
+  }
 
-dependencies {
-    implementation 'io.undertow:undertow-core:2.3.18.Final'
-    testImplementation 'org.mockito:mockito-core:5.14.2'
-    testImplementation platform('org.junit:junit-bom:5.10.0')
-    testImplementation 'org.junit.jupiter:junit-jupiter'
-}
-
-tasks.test {
+  tasks.test {
     useJUnitPlatform()
+  }
+}
+
+// Configuração específica para o subprojeto infrastructure
+project(':infrastructure') {
+  dependencies {
+    implementation project(':domain')
+    implementation project(':application')
+    implementation 'io.undertow:undertow-core:2.2.29.Final'
+
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.10.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.10.0'
+    testImplementation 'org.mockito:mockito-core:5.14.2'
+  }
+
+  graalvmNative {
+    binaries {
+      main {
+        mainClass = 'com.seccreto.infrastructure.Main'
+        imageName = 'pqxmp_v.0.0.1-alpha'
+
+        buildArgs.addAll([
+          '--no-fallback', // Gera apenas a imagem nativa, sem fallback para a JVM
+          '-H:+ReportExceptionStackTraces', // Relata exceções com stack traces completos
+          '-H:+PrintAnalysisCallTree', // Imprime a árvore de chamadas para análise
+          '-H:+ReportUnsupportedElementsAtRuntime', // Relata elementos não suportados em tempo de execução
+          '-H:Optimize=2', // Nível de otimização mais agressivo
+          '-H:+RemoveSaturatedTypeFlows', // Otimiza fluxos de tipos saturados
+          '-H:Log=registerResource:5', // Nível de log para recursos registrados
+          '-H:+InlineBeforeAnalysis', // Habilita inline de métodos antes da análise
+          '-H:EnableURLProtocols=http,https' // Especifica os protocolos de URL permitidos
+        ])
+
+        // Configurações avançadas de memória e GC
+        buildArgs.addAll([
+          '--gc=serial', // Usa o Serial GC (padrão na Community Edition)
+          '-H:InitialCollectionPolicy=BySpaceAndTime', // Política de coleta inicial
+          '-R:MaxHeapSize=1024m', // Tamanho máximo do heap
+          '-R:MinHeapSize=256m', // Tamanho mínimo do heap
+          '-R:MaxNewSize=128m', // Tamanho máximo da nova geração
+          '-H:ClassInitialization=com.seccreto.infrastructure.Main:build_time', // Inicializa a classe Main em tempo de compilação
+          '-H:IncludeResources=application.yml'
+        ])
+      }
+    }
+  }
+}
+
+// Configura a tarefa de build para depender da compilação nativa
+tasks.named('build').configure {
+  dependsOn ':infrastructure:nativeCompile'
 }

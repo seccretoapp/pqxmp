@@ -33,14 +33,14 @@ public class Main {
 
       // Inicializa HTTP/1.1
       System.out.println("Inicializando transporte HTTP/1.1...");
-      httpTransport.connect(host, httpPort, true);
+      httpTransport.connect(host, httpPort, false);
       if (httpTransport.isHealthy()) {
         System.out.println("Transporte HTTP/1.1 iniciado com sucesso!");
       }
 
       // Inicializa a camada HTTP/2
       System.out.println("Iniciando transporte HTTP/2...");
-      http2Transport.connect(host, http2Port, true);
+      http2Transport.connect(host, http2Port, false);
       if (http2Transport.isHealthy()) {
         System.out.println("Transporte HTTP/2 iniciado com sucesso!");
       }
@@ -70,7 +70,7 @@ public class Main {
       }).start();
 
       // Inicializa o BufferedReaderOptimized
-      reader = new BufferedReaderOptimized(new BufferedInputStream(new FileInputStream("file1.txt")));
+//      reader = new BufferedReaderOptimized(new BufferedInputStream(new FileInputStream("file1.txt")));
 
       // Controle de troca de arquivo
       boolean file1Active = true;
@@ -106,19 +106,19 @@ public class Main {
           System.out.println("Protocolo não identificado.");
         }
 
-        // Lê linhas do arquivo usando BufferedReaderOptimized
+//         Lê linhas do arquivo usando BufferedReaderOptimized
         String line = reader.readLine();
         if (line != null) {
           System.out.println("Linha lida: " + line);
         } else {
           // Se chegar ao final do arquivo, mude a fonte
           System.out.println("Fim do arquivo. Mudando para o próximo arquivo.");
-          if (file1Active) {
-            reader.setSource(new BufferedInputStream(new FileInputStream("file2.txt")));
-          } else {
-            reader.setSource(new BufferedInputStream(new FileInputStream("file1.txt")));
-          }
-          file1Active = !file1Active;
+//          if (file1Active) {
+//            reader.setSource(new BufferedInputStream(new FileInputStream("file2.txt")));
+//          } else {
+//            reader.setSource(new BufferedInputStream(new FileInputStream("file1.txt")));
+//          }
+//          file1Active = !file1Active;
         }
 
         // Adicione uma pausa para evitar um loop rápido
