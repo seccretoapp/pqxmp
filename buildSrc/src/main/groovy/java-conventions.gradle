@@ -1,0 +1,42 @@
+plugins {
+  id 'java'
+}
+
+version '0.0.1-Alpha'
+
+repositories {
+  mavenCentral()
+}
+
+dependencies {
+  compileOnly 'org.projectlombok:lombok:1.18.34'
+  annotationProcessor 'org.projectlombok:lombok:1.18.34'
+  testCompileOnly 'org.projectlombok:lombok:1.18.34'
+  testAnnotationProcessor 'org.projectlombok:lombok:1.18.34'
+  testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.2'
+  testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.2'
+  testImplementation 'org.mockito:mockito-junit-jupiter:5.8.0'
+  implementation 'io.vavr:vavr:0.10.4'
+}
+
+
+tasks.named("test") {
+  useJUnitPlatform()
+}
+
+task unitTests(type: Test, group: "verification") {
+  useJUnitPlatform {
+    includeTags("unitTest")
+  }
+}
+task integrationTests(type: Test, group: "verification") {
+  useJUnitPlatform {
+    includeTags("integrationTest")
+  }
+}
+
+task e2eTests(type: Test, group: "verification") {
+  useJUnitPlatform {
+    includeTags("e2eTest")
+  }
+}

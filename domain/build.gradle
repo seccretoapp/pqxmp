@@ -1,21 +1,10 @@
 plugins {
-  id 'java'
+  id 'java-conventions'
+  id 'java-library'
 }
 
-group 'com.seccreto'
-version '1.0-SNAPSHOT'
+group 'com.seccreto.domain'
 
-repositories {
-  mavenCentral()
-}
-
-dependencies {
-  // Lombok para geração de código e anotações
-  compileOnly 'org.projectlombok:lombok:1.18.34'
-  annotationProcessor 'org.projectlombok:lombok:1.18.34'
-  testCompileOnly 'org.projectlombok:lombok:1.18.34'
-  testAnnotationProcessor 'org.projectlombok:lombok:1.18.34'
-}
 
 configurations {
   testClasses {
@@ -23,16 +12,11 @@ configurations {
   }
 }
 
-tasks.withType(JavaCompile) {
-  options.encoding = 'UTF-8'
-}
-
 task testJar(type: Jar) {
   archiveClassifier.set('test')
   from sourceSets.test.output
 }
 
-test {
-  useJUnitPlatform()
-  systemProperty "file.encoding", "utf-8"
+artifacts {
+  testClasses testJar
 }

@@ -1,5 +1,5 @@
-rootProject.name = 'pqxmp'
 include 'domain'
 include 'application'
 include 'infrastructure'
 
+rootProject.name = 'pqxmp'
